@@ -13,7 +13,7 @@ VuePlotly.myplot(
 <script lang="ts">
 import { Vue, Component, Watch, Prop } from 'vue-property-decorator'
 
-import { FileSystemConfig, UI_FONT } from '@/Globals'
+import { FileSystemConfig, UI_FONT, Status } from '@/Globals'
 import DashboardDataManager from '@/js/DashboardDataManager'
 import VuePlotly from '@/components/VuePlotly.vue'
 import { buildCleanTitle } from '@/charts/allCharts'
@@ -44,6 +44,7 @@ export default class VueComponent extends Vue {
     this.updateLayout()
     this.updateTheme()
     this.dataSet = await this.loadData()
+    this.showErros()
     this.updateChart()
 
     this.options.toImageButtonOptions.filename = buildCleanTitle(this.cardTitle, this.subfolder)
@@ -87,6 +88,16 @@ export default class VueComponent extends Vue {
       this.datamanager.setFilter(this.config.dataset, filter, value)
     } catch (e) {
       console.error(e)
+    }
+  }
+
+  // Dispaly all Errors
+  private showErros() {
+    if (Object.keys(this.dataSet).length == 0) {
+      this.$store.commit('setStatus', {
+        type: Status.ERROR,
+        msg: `The read data are empty: ${this.files}`,
+      })
     }
   }
 
