@@ -13,7 +13,7 @@ import { transpose } from 'mathjs'
 
 import VuePlotly from '@/components/VuePlotly.vue'
 import DashboardDataManager from '@/js/DashboardDataManager'
-import { FileSystemConfig, UI_FONT } from '@/Globals'
+import { FileSystemConfig, UI_FONT, Status } from '@/Globals'
 import globalStore from '@/store'
 import { buildCleanTitle } from '@/charts/allCharts'
 
@@ -36,6 +36,7 @@ export default class VueComponent extends Vue {
 
   private async mounted() {
     this.updateTheme()
+    this.validateYAML()
     this.dataSet = await this.loadData()
     this.updateChart()
 
@@ -95,6 +96,43 @@ export default class VueComponent extends Vue {
 
   private updateChartWithGroupBy() {
     // tba
+  }
+
+  // Dispaly all Errors
+  private validateYAML() {
+    var title = this.cardTitle.length == 0 ? 'Untitled Bar chart' : this.cardTitle
+
+    // Title is missing
+    if (title == 'Untitled Heatmap') {
+      this.$store.commit('setStatus', {
+        type: Status.WARNING,
+        msg: `The title from the bar plot was not set in: ${this.files}`,
+      })
+    }
+
+    // Y Value is missing
+    if (this.config.y == undefined) {
+      this.$store.commit('setStatus', {
+        type: Status.ERROR,
+        msg: `The y value from the ${title} was not set in: ${this.files}`,
+      })
+    }
+
+    // Dataset is missing
+    if (this.config.dataset == undefined) {
+      this.$store.commit('setStatus', {
+        type: Status.ERROR,
+        msg: `The dataset value from the ${title} was not set in: ${this.files}`,
+      })
+    }
+
+    // Columns are missing
+    if (this.config.columns == undefined) {
+      this.$store.commit('setStatus', {
+        type: Status.ERROR,
+        msg: `The columns value from the ${title} was not set in: ${this.files}`,
+      })
+    }
   }
 
   private updateChartSimple() {

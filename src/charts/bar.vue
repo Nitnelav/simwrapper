@@ -41,10 +41,10 @@ export default class VueComponent extends Vue {
   private dataSet: { x?: any[]; y?: any[]; allRows?: any[] } = {}
 
   private async mounted() {
+    this.validateYAML()
     this.updateLayout()
     this.updateTheme()
     this.dataSet = await this.loadData()
-    this.showErros()
     this.updateChart()
 
     this.options.toImageButtonOptions.filename = buildCleanTitle(this.cardTitle, this.subfolder)
@@ -92,11 +92,38 @@ export default class VueComponent extends Vue {
   }
 
   // Dispaly all Errors
-  private showErros() {
-    if (Object.keys(this.dataSet).length == 0) {
+  private validateYAML() {
+    var title = this.cardTitle.length == 0 ? 'Untitled Bar chart' : this.cardTitle
+
+    // Title is missing
+    if (title == 'Untitled Bar chart') {
+      this.$store.commit('setStatus', {
+        type: Status.WARNING,
+        msg: `The title from the bar plot was not set in: ${this.files}`,
+      })
+    }
+
+    // X Value is missing
+    if (this.config.x == undefined) {
       this.$store.commit('setStatus', {
         type: Status.ERROR,
-        msg: `The read data are empty: ${this.files}`,
+        msg: `The x value from the ${title} was not set in: ${this.files}`,
+      })
+    }
+
+    // Dataset is missing
+    if (this.config.dataset == undefined) {
+      this.$store.commit('setStatus', {
+        type: Status.ERROR,
+        msg: `The dataset value from the ${title} was not set in: ${this.files}`,
+      })
+    }
+
+    // Columns are missing
+    if (this.config.columns == undefined) {
+      this.$store.commit('setStatus', {
+        type: Status.ERROR,
+        msg: `The columns value from the ${title} was not set in: ${this.files}`,
       })
     }
   }
