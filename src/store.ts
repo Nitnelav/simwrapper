@@ -38,6 +38,7 @@ interface GlobalState {
   runFolders: { [root: string]: { path: string }[] }
   runFolderCount: number
   statusErrors: string[]
+  statusWarnings: string[]
   statusMessage: string
   svnProjects: FileSystemConfig[]
   visualizationTypes: Map<string, VisualizationPlugin>
@@ -65,6 +66,7 @@ export default new Vuex.Store({
     isDarkMode: false,
     needLoginForUrl: '',
     statusErrors: [] as string[],
+    statusWarnings: [] as string[],
     statusMessage: 'Loading',
     svnProjects: fileSystems,
     visualizationTypes: new Map() as Map<string, VisualizationPlugin>,
@@ -121,6 +123,13 @@ export default new Vuex.Store({
     setStatus(state: GlobalState, value: { type: Status; msg: string }) {
       if (value.type === Status.INFO) {
         state.statusMessage = value.msg
+      } else if (value.type == Status.WARNING) {
+        if (
+          !state.statusWarnings.length ||
+          state.statusWarnings[state.statusWarnings.length - 1] !== value.msg
+        ) {
+          state.statusWarnings.push(value.msg)
+        }
       } else {
         if (
           // don't repeat yourself
@@ -138,6 +147,7 @@ export default new Vuex.Store({
     },
     clearAllErrors(state: GlobalState) {
       state.statusErrors = []
+      state.statusWarnings = []
     },
     resize(state: GlobalState) {
       state.resizeEvents += 1

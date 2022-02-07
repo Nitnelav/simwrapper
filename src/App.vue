@@ -6,10 +6,42 @@
     router-view.main-content
     p(style="text-justify: center; margin: auto auto; font-size: 2rem;"): i • S i m W r a p p e r •
 
-  .message-zone(v-if="state.statusErrors.length")
-    .message-error(v-for="err,i in state.statusErrors")
+  .test-blurred(v-if="state.statusErrors.length || state.statusWarnings.length")
+
+  .test-not-details(v-if="this.showDetails && (state.statusErrors.length || state.statusWarnings.length)")
+    .test-not-details-text
+      p.details-header Details
+      p.details-text {{this.warningDetails}}
+  .test-not(v-if="state.statusErrors.length || state.statusWarnings.length")
+    .test-header(v-if="state.statusErrors.length == 1 && state.statusWarnings.length == 1") Oops... You got {{state.statusErrors.length}} error and {{state.statusWarnings.length}} warning
+    .test-header(v-else-if="state.statusErrors.length == 1 && state.statusWarnings.length") Oops... You got {{state.statusErrors.length}} error and {{state.statusWarnings.length}} warnings
+    .test-header(v-else-if="state.statusErrors.length && state.statusWarnings.length == 1") Oops... You got {{state.statusErrors.length}} errors and {{state.statusWarnings.length}} warning
+    .test-header(v-else-if="state.statusErrors.length && state.statusWarnings.length") Oops... You got {{state.statusErrors.length}} errors and {{state.statusWarnings.length}} warnings
+    .test-header(v-else-if="state.statusErrors.length == 1") Oops... You got {{state.statusErrors.length}} error
+    .test-header(v-else-if="state.statusErrors.length") Oops... You got {{state.statusErrors.length}} errors
+    .test-header(v-else-if="state.statusWarnings.length == 1") Oops... You got {{state.statusWarnings.length}} warning
+    .test-header(v-else-if="state.statusWarnings.length") Oops... You got {{state.statusWarnings.length}} warnings
+    .message-box-test
+      .message-test-error(v-for="war,i in state.statusWarnings")
+        p: i.fa.fa-icon.fa-exclamation-triangle(style="color: orange;")
+        p(v-html="war")
+        p: i.fa.fa-icon.fa-question-circle(@mouseover="showDetails = true, warningDetails = 'I am baby sriracha fam cloud bread leggings selvage artisan irony. Waistcoat vegan ugh, selfies typewriter helvetica butcher fanny pack readymade. Sriracha seitan pickled sartorial vape. Fanny pack pug photo booth poutine drinking vinegar kombucha umami swag woke hashtag. Four loko keffiyeh vegan narwhal chambray polaroid before they sold out vape bitters DIY lomo cray echo park shoreditch.'" @mouseleave="showDetails = false")
+      .message-test-error(v-for="err,i in state.statusErrors")
+        p: i.fa.fa-icon.fa-exclamation-triangle(style="color: red;")
+        p(v-html="err")
+        p: i.fa.fa-icon.fa-question-circle(@mouseover="showDetails = true, warningDetails = 'I am baby sriracha fam cloud bread leggings selvage artisan irony. Waistcoat vegan ugh, selfies typewriter helvetica butcher fanny pack readymade. '" @mouseleave="showDetails = false")
+    .button-box-test
+      button.button-test.button-right-test(@click="removeAllErrors()") Ignore
+      button.button-test(@click="reloadPge()") Reload
+
+  .message-zone(v-if="state.statusErrors.length || state.statusWarnings.length")
+    .message-error(v-for="err,i in state.statusWarnings")
       p: i.fa.fa-icon.fa-exclamation-triangle(style="color: orange;")
       p(v-html="err")
+    .message-error(v-for="err,i in state.statusErrors")
+      p: i.fa.fa-icon.fa-exclamation-triangle(style="color: red;")
+      p(v-html="err")
+      p: i.fa.fa-icon.fa-question-circle
     button.button.is-small(@click="removeAllErrors()") CLEAR
 
 </template>
@@ -24,7 +56,7 @@ const i18n = {
     },
     de: {
       light: 'hell',
-      dark: 'dark',
+      dark: 'dunkel',
       share: 'teilen',
     },
   },
@@ -48,6 +80,10 @@ writableMapBox.accessToken = MAPBOX_TOKEN
 class App extends Vue {
   private state = globalStore.state
 
+  private showDetails = true
+  private warningDetails =
+    'I am baby sriracha fam cloud bread leggings selvage artisan irony. Waistcoat vegan ugh, selfies typewriter helvetica butcher fanny pack readymade. Sriracha seitan pickled sartorial vape. Fanny pack pug photo booth poutine drinking vinegar kombucha umami swag woke hashtag. Four loko keffiyeh vegan narwhal chambray polaroid before they sold out vape bitters DIY lomo cray echo park shoreditch.'
+
   private mounted() {
     // theme
     const theme = localStorage.getItem('colorscheme')
@@ -69,6 +105,10 @@ class App extends Vue {
     const topLinks = home.concat(this.state.svnProjects)
 
     return topLinks
+  }
+
+  private reloadPge() {
+    location.reload()
   }
 
   private removeAllErrors() {
@@ -492,6 +532,112 @@ a:hover {
 // sankey text colors don't break thru, sigh
 .node-title {
   fill: var(--text);
+}
+
+.test-not {
+  height: 340px;
+  width: 600px;
+  background-color: var(--bgBrowser);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 25px;
+  padding: 25px;
+  box-shadow: 0px 0px 30em rgba(58, 58, 58, 0.89);
+}
+
+.test-header {
+  color: var(--bgBold);
+  font-size: 2rem;
+  width: 100%;
+  height: 50px;
+  text-align: center;
+}
+
+.test-blurred {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(119, 119, 119, 0.61);
+
+  backdrop-filter: blur(5px);
+}
+
+.message-test-error {
+  padding: 0.5rem 0.5rem;
+  display: flex;
+  flex-direction: row;
+  line-height: 1.2rem;
+
+  p {
+    margin: auto 0.5rem auto 0;
+    font-weight: normal;
+    padding: 0 0;
+    color: white;
+  }
+  button-test {
+    //margin: auto 0;
+    //width: 600px;
+  }
+}
+
+.button-test {
+  width: 250px;
+  height: 40px;
+  background-color: rgba(0, 0, 0, 0);
+  color: white;
+  font-size: 1.3rem;
+  border-style: none;
+}
+
+.message-box-test {
+  height: 200px;
+  width: 100%;
+  overflow: scroll;
+  margin-bottom: 0;
+}
+
+.button-right-test {
+  margin-right: 50px;
+}
+
+::-webkit-scrollbar-corner {
+  background: rgba(0, 0, 0, 0);
+}
+
+.message-zone {
+  visibility: hidden;
+}
+
+.test-not-details {
+  min-height: 240px;
+  width: 600px;
+  //background-color: var(--bgBrowser);
+  background-color: rgb(95, 116, 150);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  //transform: translate(-50%, -50%);
+  transform: translateX(-50%) translateY(-50%) translateY(240px);
+  border-radius: 25px;
+  padding: 25px;
+  //box-shadow: 0px 0px 30em rgba(58, 58, 58, 0.89);
+}
+
+.test-not-details-text {
+  color: white;
+  //margin-top: 100px;
+  padding-top: 30px;
+  font-weight: normal;
+}
+
+.details-header {
+  font-size: 1.4rem;
+}
+
+.details-text {
+  padding-top: 10px;
 }
 
 @media only screen and (max-width: 640px) {

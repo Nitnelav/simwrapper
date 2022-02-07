@@ -95,6 +95,21 @@ export default class VueComponent extends Vue {
   private validateYAML() {
     var title = this.cardTitle.length == 0 ? 'Untitled Bar chart' : this.cardTitle
 
+    this.$store.commit('setStatus', {
+      type: Status.ERROR,
+      msg: `This is an Example Error (Bar Plot)`,
+    })
+
+    this.$store.commit('setStatus', {
+      type: Status.ERROR,
+      msg: `This is an Example Error 2 (Bar Plot)`,
+    })
+
+    this.$store.commit('setStatus', {
+      type: Status.WARNING,
+      msg: `This is an Example Warning`,
+    })
+
     // Title is missing
     if (title == 'Untitled Bar chart') {
       this.$store.commit('setStatus', {
