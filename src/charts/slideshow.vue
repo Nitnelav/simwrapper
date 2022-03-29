@@ -43,6 +43,7 @@ export default class VueComponent extends Vue {
   private r: RegExp = new RegExp('^(?:[a-z]+:)?//', 'i')
 
   private mounted() {
+    console.log(this.fileSystemConfig, this.subfolder, this.files, this.config)
     const fileApi = new HTTPFileSystem(this.fileSystemConfig)
 
     if (this.config != null) Object.assign(this.options, this.config)
@@ -57,20 +58,26 @@ export default class VueComponent extends Vue {
     // TODO: throw
     if (this.config.slides != null && typeof this.config.slides[Symbol.iterator] === 'function') {
       // Resolve relative URLs
+      //console.log(this.config.slides)
       for (const data of this.config.slides) {
+        // Dateiname = data.
         if (hasOwnProperty(data, 'image')) {
-          if (!this.r.test(data.image))
-            data.image = fileApi.cleanURL(`${this.subfolder}/${data.image}`)
+          if (!this.r.test(data.image)) console.log(data.image)
+          data.image = fileApi.cleanURL(`${this.subfolder}/${data.image}`)
+          console.log(data.image)
+          // Adding "wildcard"?!
         }
 
         if (hasOwnProperty(data, 'video')) {
           if (!this.r.test(data.video))
             data.video = fileApi.cleanURL(`${this.subfolder}/${data.video}`)
+          // Adding "wildcard"?!
         }
 
         this.slides.push(data)
       }
     }
+    //console.log(this.slides)
 
     this.$emit('isLoaded')
   }
