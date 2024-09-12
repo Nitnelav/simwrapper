@@ -92,57 +92,25 @@ let fileSystems: FileSystemConfig[] = [
   // End. Below here, these are editable:
 
   {
-    name: 'VSP TU-Berlin',
-    slug: 'public',
-    description: 'Public data at VSP / TU Berlin',
-    baseURL: 'https://svn.vsp.tu-berlin.de/repos/public-svn/matsim/scenarios/countries',
+    name: 'SYMEXPO Nantes',
+    slug: 'symexpo-nantes',
+    description: 'Private Nantes data at UGE SYMEXPO',
+    baseURL: 'https://fnan-19-089.ad.ifsttar.fr/symexpo/nantes',
     thumbnail: '/simwrapper/images/thumb-chart.jpg',
-    skipList: ['episim/battery'],
   },
   {
-    name: 'Visualization Examples',
-    slug: 'examples',
-    description: 'Various SimWrapper data vis types',
-    thumbnail: 'images/thumb-localfiles.jpg',
-    baseURL: 'https://svn.vsp.tu-berlin.de/repos/public-svn/shared/simwrapper',
-    example: true,
+    name: 'SYMEXPO Lyon',
+    slug: 'symexpo-lyon',
+    description: 'Private Lyon data at UGE SYMEXPO',
+    baseURL: 'https://fnan-19-089.ad.ifsttar.fr/symexpo/lyon',
+    thumbnail: '/simwrapper/images/thumb-chart.jpg',
   },
   {
-    name: 'Hamburg RealLabHH',
-    slug: 'reallabhh',
-    description: 'Hamburg, Germany',
-    description_de: 'Hamburg, Deutschland',
-    baseURL:
-      'https://svn.vsp.tu-berlin.de/repos/public-svn/matsim/scenarios/countries/de/hamburg/hamburg-v2/hamburg-v2.2/viz',
-    thumbnail: '/simwrapper/images/thumb-localfiles.jpg',
-    example: true,
-  },
-  {
-    name: 'Berlin BENE Project',
-    slug: 'bene',
-    description: 'widescreen, in German',
-    baseURL:
-      'https://svn.vsp.tu-berlin.de/repos/public-svn/matsim/scenarios/countries/de/berlin/projects/bene/website',
-    thumbnail: '/simwrapper/images/thumb-localfiles.jpg',
-    hidden: false,
-    example: true,
-  },
-  {
-    name: 'Localhost:8000',
-    slug: 'local',
-    description: 'Files shared using "simwrapper serve"',
-    baseURL: 'http://localhost:8000',
-    thumbnail: '/simwrapper/images/thumb-localfiles.jpg',
-  },
-  {
-    name: 'KoMoDnext',
-    slug: 'komodnext',
-    description: 'Automated driving in the digital test field, Düsseldorf',
-    description_de: 'Automatisiertes Fahren im digitalen Testfeld Düsseldorf',
-    baseURL:
-      'https://svn.vsp.tu-berlin.de/repos/public-svn/matsim/scenarios/countries/de/duesseldorf/projects/komodnext/website',
-    thumbnail: '/simwrapper/images/thumb-localfiles.jpg',
-    hidden: true,
+    name: 'SYMEXPO 94',
+    slug: 'symexpo-94',
+    description: 'Private 94 data at UGE SYMEXPO',
+    baseURL: 'https://fnan-19-089.ad.ifsttar.fr/symexpo/94',
+    thumbnail: '/simwrapper/images/thumb-chart.jpg',
   },
 ]
 
